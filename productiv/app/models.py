@@ -1,3 +1,24 @@
 from django.db import models
+from django.core.validators import MaxValueValidator, MinValueValidator
 
-# Create your models here.
+
+class Question(models.Model):
+    question_text = models.CharField(max_length=200)
+    pub_date = models.DateTimeField('date published')
+
+
+class Choice(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    choice_text = models.CharField(max_length=200)
+    votes = models.IntegerField(default=0)
+
+class Activity(models.Model):
+    activity_id = models.IntegerField(primary_key=True)
+    description = models.CharField(max_length=1000)
+    is_complete = models.BooleanField(default=False)
+    due_dt = models.DateTimeField(auto_now_add=True)
+    reminder_dt = models.DateTimeField(auto_now_add=True)
+    priority = models.IntegerField(default=2, validators=[MaxValueValidator(3), MinValueValidator(1)])
+    # todo duration as list of from-to time
+    # todo location 
+    # todo dependencies
