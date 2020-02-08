@@ -1,15 +1,21 @@
 from productiv.app.activity import Reminder, Action, Due, Activity
 from productiv.app.parser import tokenizer
-import dateparser
+from timefhuman import timefhuman
+from datetime import datetime
+from datetime import timedelta
 
 priority_value = {"low": 0, "medium": 1, "high": 2}
 
-
 def parse_time(time_string):
-    return time_string
-    # if time_string == "":
-    #     return dateparser.parse("tomorrow")
-    # return dateparser.parse(time_string)
+    # return time_string
+    if time_string == "":
+        return timefhuman("tomorrow")
+    date = timefhuman(time_string)
+    if not date:
+        return None
+    if date < datetime.now():
+        return date + timedelta(days=1)
+    return date
 
 
 class ActivityBuilder:
@@ -59,5 +65,5 @@ def parse_activity(sentence):
     return builder.build()
 
 
-print(parse_activity("""Remind me at home at 3 to do my coursework at Imperial at five o'clock high due
+print(parse_activity("""Remind me in my home at 3 to do my coursework at Imperial at five pm high due
                         tomorrow at 5pm"""))
