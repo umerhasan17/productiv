@@ -14,7 +14,7 @@ class Choice(models.Model):
 
 class Reminder(models.Model):
     time = models.DateTimeField(editable=True, blank=True, null=True)
-    place = models.CharField(max_length=100)
+    place = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
         return "Reminder(" + str(self.time) + ", " + self.place + ")"
@@ -26,7 +26,7 @@ class Reminder(models.Model):
 class Action(models.Model):
     description = models.CharField(max_length=1000)
     time = models.DateTimeField(editable=True, blank=True, null=True)
-    place = models.CharField(max_length=100)
+    place = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
         return "Action(" + self.description + ", " + str(self.time) + ", " + self.place + ")"
@@ -36,7 +36,7 @@ class Action(models.Model):
 
 class Due(models.Model):
     time = models.DateTimeField(editable=True, blank=True, null=True)
-    place = models.CharField(max_length=100)
+    place = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
         return "Due(" + str(self.time) + ", " + self.place + ")"
