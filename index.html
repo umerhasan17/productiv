@@ -1,0 +1,23 @@
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<head></head>
+
+<body>
+    <div id = "hi"> {{ message }} </div>
+    <div id = "go"> {{ thing }} </div>
+
+    <script>
+        var hi = new Vue({
+            el: '#hi',
+            data: {
+                message: 'Hello there!'
+            }
+        })
+
+        var other = new Vue({
+            el: '#go',
+            data: {
+                    thing: 'Thing!'
+            }
+        })
+    </script>
+</body>
