@@ -6,10 +6,10 @@ priority_value = {"low": 0, "medium": 1, "high": 2}
 
 
 def parse_time(time_string):
-    #return time_string
-    if time_string == "":
-        return dateparser.parse("tomorrow")
-    return dateparser.parse(time_string)
+    return time_string
+    # if time_string == "":
+    #     return dateparser.parse("tomorrow")
+    # return dateparser.parse(time_string)
 
 
 class ActivityBuilder:
@@ -51,10 +51,13 @@ class ActivityBuilder:
         return Activity(self.reminder, self.action, self.due)
 
 
-tokenized_sentence = tokenizer.split_sentence("""Remind me at home at 3 to do my coursework at Imperial
-                                                 at five o'clock high due tomorrow at 5pm""")
+def parse_activity(sentence):
+    tokenized_sentence = tokenizer.split_sentence(sentence)
+    builder = ActivityBuilder()
+    for element in tokenized_sentence:
+        builder.add_token(element)
+    return builder.build()
 
-builder = ActivityBuilder()
-for element in tokenized_sentence:
-    builder.add_token(element)
-print(builder.build())
+
+print(parse_activity("""Remind me at home at 3 to do my coursework at Imperial at five o'clock high due
+                        tomorrow at 5pm"""))
