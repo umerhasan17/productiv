@@ -33,7 +33,9 @@ class Token:
             text += " " + word
         return text.strip()
 
-
+"""
+NLTK tokenization and parts of speech tagging
+"""
 def tokenize_and_tag(sentence):
     tokens = nltk.word_tokenize(sentence)
     tagged = nltk.pos_tag(tokens)
@@ -44,10 +46,12 @@ def tokenize(sentence):
     tagged_words = tokenize_and_tag(sentence)
     elements = []
     curr = []
-    for tagged in tagged_words:
-        if tagged[0] in numbers:
-            tagged = (numbers[tagged[0]], tagged[1])
-        if tagged[1] in separator_tags or tagged[0] in priorities or tagged[0] == 'due' or tagged[0] in times:
+    for word, tag in tagged_words:
+        if word in numbers:
+            # convert word number to digit number
+            tagged = (numbers[word], tag)
+        if tag in separator_tags or word in priorities or word == 'due' or word in times:
+            # create sentence segment
             elements.append(curr)
             curr = []
         curr.append(tagged)
