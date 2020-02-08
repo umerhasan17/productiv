@@ -13,7 +13,6 @@ class Choice(models.Model):
     votes = models.IntegerField(default=0)
 
 class Activity(models.Model):
-    activity_id = models.IntegerField(primary_key=True)
     description = models.CharField(max_length=1000)
     is_complete = models.BooleanField(default=False)
     due_dt = models.DateTimeField(auto_now_add=True)
