@@ -1,8 +1,11 @@
 import nltk
+from nltk.corpus import wordnet
 nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
+nltk.download('wordnet')
 
 separator_tags = ['CC', 'IN', 'MD', 'TO', 'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ', 'WDT', 'WP']
+reminders = ['remember', 'remind']
 
 class Token:
     def __init__(self, kind, text):
@@ -18,22 +21,25 @@ def tag(sentence):
     tagged = nltk.pos_tag(tokens)
     return tagged
 
+
+def categorize_verb(verb):
+    if verb in reminders:
+        return "REMINDER"
+    return "ACTION"
+
+
 def tokenize(sentence):
     tagged_words = tag(sentence)
-    i = 0
-    while i < len(words):
-        token, i = token_at(i, words)
-        print(token)
-
-
-def token_at(i, words):
-    token = word_token(words[i])
-    s = words[i]
-    i = i + 1
-    while i < len(words) and word_token(words[i]) == "NONE":
-        s = s + " " + words[i]
-        i = i + 1
-    return Token(token, s), i
+    tokens = []
+    curr = []
+    for tagged in tagged_words:
+        if tagged[1] in separator_tags:
+            tokens.append(curr)
+            curr = []
+        curr.append(tagged)
+    tokens.append(curr)
+    tokens.remove([])
+    return tokens
 
 
 def word_token(word):
@@ -43,3 +49,10 @@ def word_token(word):
 
 
 print(tag("""Remind me to do my coursework at Imperial at five o'clock."""))
+tokens = tokenize("""Remind me to do my coursework at Imperial at 5o'clock.""")
+for token in tokens:
+    print(token)
+
+# first = wordnet.synsets("remind")[0]
+# second = wordnet.synsets("reminder")[0]
+# print(first.wup_similarity(second))
