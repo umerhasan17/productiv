@@ -25,7 +25,7 @@ class Token:
         text = ""
         for word, kind in self.words:
             text += " " + word
-        return text
+        return text.strip()
 
 
 def tokenize_and_tag(sentence):
