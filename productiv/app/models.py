@@ -12,6 +12,38 @@ class Choice(models.Model):
     choice_text = models.CharField(max_length=200)
     votes = models.IntegerField(default=0)
 
+class Reminder(models.Model):
+    time = models.DateTimeField(editable=True, blank=True, null=True)
+    place = models.CharField(max_length=100)
+
+    def __str__(self):
+        return "Reminder(" + str(self.time) + ", " + self.place + ")"
+
+    def __repr__(self):
+        return self.__str__()
+
+
+class Action(models.Model):
+    description = models.CharField(max_length=1000)
+    time = models.DateTimeField(editable=True, blank=True, null=True)
+    place = models.CharField(max_length=100)
+
+    def __str__(self):
+        return "Action(" + self.description + ", " + str(self.time) + ", " + self.place + ")"
+
+    def __repr__(self):
+        return self.__str__()
+
+class Due(models.Model):
+    time = models.DateTimeField(editable=True, blank=True, null=True)
+    place = models.CharField(max_length=100)
+
+    def __str__(self):
+        return "Due(" + str(self.time) + ", " + self.place + ")"
+
+    def __repr__(self):
+        return self.__str__()
+
 class ActivityList(models.Model):
     name = models.CharField(max_length=100)
 
@@ -32,13 +64,16 @@ def get_or_create_inbox():
 
 class Activity(models.Model):
     parent_list = models.ForeignKey(ActivityList, on_delete=models.CASCADE, default=get_or_create_inbox) 
-    description = models.CharField(max_length=1000, blank=True)
+    action = models.OneToOneField(Action, on_delete=models.CASCADE, null=True)
     is_complete = models.BooleanField(default=False)
-    due_dt = models.DateTimeField(editable=True, blank=True, null=True)
-    reminder_dt = models.DateTimeField(editable=True, blank=True, null=True)
+    due = models.OneToOneField(Due, on_delete=models.CASCADE, null=True)
+    reminder = models.OneToOneField(Reminder, on_delete=models.CASCADE, null=True)
     priority = models.IntegerField(default=2, validators=[MaxValueValidator(3), MinValueValidator(1)])
     # todo duration as list of from-to time
-    # todo location 
     # todo dependencies
 
-    
+    def __str__(self):
+        return "Activity(" + str(self.reminder) + ", " + str(self.action) + ", " + str(self.due) + ")"
+
+    def __repr__(self):
+        return self.__str__()
