@@ -15,8 +15,8 @@ class Choice(models.Model):
 class Activity(models.Model):
     description = models.CharField(max_length=1000)
     is_complete = models.BooleanField(default=False)
-    due_dt = models.DateTimeField(auto_now_add=True)
-    reminder_dt = models.DateTimeField(auto_now_add=True)
+    due_dt = models.DateTimeField(editable=True)
+    reminder_dt = models.DateTimeField(editable=True)
     priority = models.IntegerField(default=2, validators=[MaxValueValidator(3), MinValueValidator(1)])
     # todo duration as list of from-to time
     # todo location 
