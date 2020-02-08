@@ -16,23 +16,26 @@ class Token:
         self.words = words
 
     def __str__(self):
-        text = ""
-        for word, kind in self.words:
-            text += " " + word
-        return "(" + self.kind + ": " + text + ")"
+        return "(" + self.kind + ": " + self.text() + ")"
 
     def __repr__(self):
         return self.__str__()
 
+    def text(self):
+        text = ""
+        for word, kind in self.words:
+            text += " " + word
+        return text
 
-def tag(sentence):
+
+def tokenize_and_tag(sentence):
     tokens = nltk.word_tokenize(sentence)
     tagged = nltk.pos_tag(tokens)
     return tagged
 
 
 def tokenize(sentence):
-    tagged_words = tag(sentence)
+    tagged_words = tokenize_and_tag(sentence)
     elements = []
     curr = []
     for tagged in tagged_words:
@@ -45,18 +48,25 @@ def tokenize(sentence):
     return elements
 
 
-def classify_word(word):
-    if word[1] in verb_tags:
-        if word[0] in reminders:
+def classify_word(token):
+    word = token[0].lower()
+    tag = token[1]
+
+    if tag in verb_tags:
+        if word in reminders:
             return "REMINDER"
         else:
             return "ACTION"
-    if word[1] == 'CD' or word[0] in times:
+    if tag == 'CD' or word in times:
         return "TIME"
-    if word[1] in noun_tags:
+    if tag in noun_tags:
         return "PLACE"
-    if word[0] == 'due':
+    if word in priorities:
+        return "PRIORITY"
+    if word == "due":
         return "DUE"
+    if word == 'to':
+        return "TO"
     return "NONE"
 
 
